@@ -34,6 +34,7 @@ class MCTS {
 
 		public void setChildArray(List<State> child) {
 			this.childArray=child;
+			
 		}
 
 		/**
