@@ -108,10 +108,10 @@ class Board implements Ilayout, Cloneable {
 
 		for (int i = 0; i < size; i++) {
 			for (int j = 0; j < size; j++) {
-				if (board[i][j] == 1)
+				if (board[i][j] == -1)
 					result += "X ";
 
-				else if (board[i][j] == -1)
+				else if (board[i][j] == 1)
 					result += "O ";
 
 				else
@@ -201,10 +201,10 @@ class Board implements Ilayout, Cloneable {
 		return result;
 	}
 
-	public void makeMove(int index){
-
+	public void makeMove(int index, int player){
+		this.player=player;
 		try{
-
+		
 		if(index == 0){
 			if(this.board[0][0] == 0)
 				this.board[0][0] = -1;
@@ -265,7 +265,7 @@ class Board implements Ilayout, Cloneable {
 		Scanner scn = new Scanner(System.in);
 		System.out.println("Invalid position inserted, Type a valid position : ");
 		index = scn.nextInt();
-		makeMove(index);
+		makeMove(index,player);
 		scn.close();
 		
 	}
@@ -278,7 +278,7 @@ class Board implements Ilayout, Cloneable {
 
 		List<Ilayout> list = new ArrayList<Ilayout>();
 		Board copy2 = this.clone();
-
+		
 		for (int i = 0; i < size; i++) {
 			for (int j = 0; j < size; j++) {
 				if (!list.contains(copy2)) {

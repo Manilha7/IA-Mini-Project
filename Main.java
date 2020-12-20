@@ -1,30 +1,17 @@
 import java.util.Scanner;
 
+
 public class Main {
 
 	public static void main(String[] args) {
 		Board board = new Board();
-		Scanner sc = new Scanner(System.in);
-	    int player1 = Board.P1;
-	    int player2= Board.P2;
-	    while(board.checkStatus() == -1) {
-	    	board.performMove(player1, new Position(sc.nextInt(),sc.nextInt()));
-	    	if(board.checkStatus() != -1) {
-	    		board.printBoard();
-	    		System.out.println("--------");
-	    		break;
-	    	}
-	        board = MonteCarloTreeSearch.findNextMove(board, player2);
-	        board.printBoard();
-	        System.out.println("--------");
+		int index= 5;
+		board.makeMove(index, -1);
+		MCTS a=new MCTS();
+		board= a.solve(board);
+		System.out.println(board);
 	    }
-	    sc.close();
-	    board.printStatus();
-	}
-		
-
-	
-	
+	    
 
 }
 
