@@ -34,7 +34,7 @@ class MCTS {
 
 		public void setChildArray(List<State> child) {
 			this.childArray=child;
-			
+
 		}
 
 		/**
@@ -91,7 +91,7 @@ class MCTS {
 			i++;
 		}
 		State winstate=  winGameRatio(root.childArray);
-		System.out.println((Board) winstate.layout);
+		//System.out.println((Board) winstate.layout);
 		return (Board) winstate.layout ;
 	}
 
@@ -109,6 +109,7 @@ class MCTS {
         double uctPrevious = -1;
         for (State child: childs) {
 			double uct= uctValue(child);
+			System.out.println(uct);
             if(uct > uctPrevious){
                 result = child;
                 uctPrevious = uctValue(child);
