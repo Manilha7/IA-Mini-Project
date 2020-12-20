@@ -58,65 +58,63 @@ class MCTS {
 		return sucs;
 	}
 
-
+	public static State winGameRatio(List<State> list){
+        State result = null;
+        double highestWinRatio = -999;
+        for (State st: list) {
+            double tmp = (double) st.totalScore / (double) st.numberOfVisits;
+            if(tmp > highestWinRatio){
+                result = st;
+                highestWinRatio = tmp;
+            }
+        }
+        return result;
+    }
 
 	public static Board solve(Ilayout s) {
 
 
-		State promisingNode = new State(s, null);
-
+		State root = new State(s, null);
+		State promisingNode;
 		long startTime = System.currentTimeMillis();
 		long endTime = startTime + (60 * 60 * 1000);// 1 hour
-
-		//while (startTime < endTime) {
+		int i=0;
+		while (i<1000) {
 		
-			promisingNode = selectPromisingState(promisingNode);
+			promisingNode = selectPromisingState(root);
+			//System.out.println((Board) promisingNode.layout);
 			expansion(promisingNode);
-			for (State child : promisingNode.childArray) {
-				double winscore = simulation(child);
-				System.exit(0);
-				backpropagation(child, winscore);
-			}
-		//}
-
-		return (Board) promisingNode.layout ;
+			double winscore = simulation(promisingNode);
+			//System.out.println(winscore);
+			backpropagation(promisingNode, winscore);
+			i++;
+		}
+		State winstate=  winGameRatio(root.childArray);
+		System.out.println((Board) winstate.layout);
+		return (Board) winstate.layout ;
 	}
 
 	public static State selectPromisingState(State rootState) {
 		State state = rootState;
-		while (state.getChildArray().size() != 0) {
-			state = findBestNodeWithUCT(state);
+		while (state.childArray.size() > 0) {
+			state = findBestNodeWithUCT(state.childArray);
 		}
 		return state;
 
 	}
-
-	private static double simulation(State child) {
-		double winscore = 0.5;
-			Random rand = new Random();
-			List<Ilayout> temporarychilds = child.layout.children();
-			State ts = child;
-			while (temporarychilds.size() != 0 && winscore == 0.5) {
-				ts = new State(temporarychilds.get(rand.nextInt(temporarychilds.size())), ts);
-				winscore = ts.layout.getResult();
-				System.out.println((Board) ts.layout);
-				temporarychilds = ts.layout.children();
-		}
-		System.out.println(winscore);
-		return winscore;
-	}
-
-	private static State backpropagation(State promisingNode, double winscore) {
-		promisingNode.numberOfVisits++;
-		promisingNode.totalScore += winscore;
-		while( promisingNode.father !=null){
-			promisingNode=promisingNode.father;
-			promisingNode.numberOfVisits++;
-			promisingNode.totalScore += winscore;
-		}
-		return promisingNode;
-
-	}
+	
+	public static State findBestNodeWithUCT(List<State> childs){
+        State result = null;
+        double uctPrevious = -1;
+        for (State child: childs) {
+			double uct= uctValue(child);
+            if(uct > uctPrevious){
+                result = child;
+                uctPrevious = uctValue(child);
+            }
+        }
+        return result;
+    }
 
 
 	public static double uctValue(State child) {
@@ -125,29 +123,43 @@ class MCTS {
 		if (nodeVisits == 0) {
 			return Double.MAX_VALUE;
 		}
-		return (child.totalScore / nodeVisits) + 1.41 * Math.sqrt(Math.sqrt(parentVisit) / nodeVisits);
+		return (child.totalScore / nodeVisits) + 1.41 * Math.sqrt(Math.log(parentVisit) / nodeVisits);
 	}
 
-	public static State findBestNodeWithUCT(State state) {
-		double uctprevious = 0;
-		State result = new State();
-		for (State child : state.childArray) {
-			double uct = uctValue(child);
-			if (state.layout.getPlayer() == -1) {
-				if (uct > uctprevious) {
-					uctprevious = uct;
-					result = child;
-				}
-			} else {
-				if (uct < uctprevious) {
-					uctprevious = uct;
-					result = child;
-				}
-			}
+	
+
+
+	
+	private static double simulation(State child) {
+		double winscore = child.layout.getResult();
+		//System.out.println(winscore);
+			Random rand = new Random();
+			List<Ilayout> temporarychilds = child.layout.children();
+			State ts = child;
+			while (temporarychilds.size() != 0 && winscore == 0.5) {
+				ts = new State(temporarychilds.get(rand.nextInt(temporarychilds.size())), ts);
+				winscore = ts.layout.getResult();
+				//System.out.println((Board) ts.layout);
+				//System.out.println(winscore);
+				temporarychilds = ts.layout.children();
 		}
-		return result;
-
+		//System.out.println((Board) ts.layout);
+		//System.out.println(winscore);
+		return winscore;
 	}
+
+	private static void backpropagation(State promisingNode, double winscore) {
+		promisingNode.numberOfVisits++;
+		promisingNode.totalScore += winscore;
+		while( promisingNode.father !=null){
+			promisingNode=promisingNode.father;
+			promisingNode.numberOfVisits++;
+			promisingNode.totalScore += winscore;
+		}
+	}
+
+
+
 
 	public static void expansion(State promState) {
 		List<State> sucs = sucessors(promState);

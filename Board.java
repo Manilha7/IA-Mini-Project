@@ -138,9 +138,14 @@ class Board implements Ilayout, Cloneable {
 		//Checking for rows and columns for a possible win 
 		for (int i = 0; i < rows; i++) {
 			sumCol = 0;
+			sumRow=0;
 			for (int j = 0; j < cols; j++) {
 				sumRow = sumRow + copy.board[i][j];
+				//System.out.println("i= " +i+ " j="+ j+ " value= "+copy.board[i][j]);
+				//System.out.println(sumRow);
 				sumCol = sumCol + copy.board[j][i];
+				//System.out.println("i= " +i+ " j="+ j+ " value= "+copy.board[j][i]);
+				//System.out.println(sumCol);
 			}
 
 			if (sumRow == 3 || sumCol == 3) {
@@ -157,11 +162,12 @@ class Board implements Ilayout, Cloneable {
 
 
 		//If no win on a row or a column then check the diagonal
-		if (result != 1.0 && result != 0.0) {
+		if (result == 0.5) {
 			for (int i = 0; i < rows; i++) {
 				for (int j = 0; j < cols; j++) {
 					if (i == j) {
 						sumDiag = sumDiag + copy.board[i][j];
+						
 					}
 
 					if (sumDiag == 3) {
@@ -177,11 +183,11 @@ class Board implements Ilayout, Cloneable {
 		}
 
 		//If the diagonal neither have a win for someone then the anti-diagonal is checked
-		else if (result != 1.0 && result != 0.0) {
+		if (result == 0.5) {
 
 			for (int i = 0, j = cols - 1; i < rows && j >= 0; i++, j--) {
 				sumAntiDiag = sumAntiDiag + copy.board[i][j];
-
+				//System.out.println(sumAntiDiag);
 				if (sumAntiDiag == 3) {
 					result = 1.0;
 					break;
@@ -201,8 +207,8 @@ class Board implements Ilayout, Cloneable {
 		return result;
 	}
 
-	public void makeMove(int index, int player){
-		this.player=player;
+	public void makeMove(int index){
+		this.player=-1;
 		try{
 		
 		if(index == 0){
@@ -265,7 +271,7 @@ class Board implements Ilayout, Cloneable {
 		Scanner scn = new Scanner(System.in);
 		System.out.println("Invalid position inserted, Type a valid position : ");
 		index = scn.nextInt();
-		makeMove(index,player);
+		makeMove(index);
 		scn.close();
 		
 	}
