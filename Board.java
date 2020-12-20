@@ -207,55 +207,55 @@ class Board implements Ilayout, Cloneable {
 
 		if(index == 0){
 			if(this.board[0][0] == 0)
-				this.board[0][0] = 1;
+				this.board[0][0] = -1;
 			
 			else {throw new IllegalArgumentException();}
 		}
 		else if(index == 1){
 			if(this.board[0][1] == 0)
-				this.board[0][1] = 1;
+				this.board[0][1] = -1;
 		
 			else{throw new IllegalArgumentException();}
 		}
 		else if(index == 2){
 			if(this.board[0][2] == 0)
-				this.board[0][2] = 1;
+				this.board[0][2] = -1;
 			
 			else{throw new IllegalArgumentException();}
 		}
 		else if(index == 3){
 			if(this.board[1][0] == 0)
-				this.board[1][0] = 1;
+				this.board[1][0] = -1;
 			
 			else{throw new IllegalArgumentException();}
 		}
 		else if(index == 4){
 			if(this.board[1][1] == 0)
-				this.board[1][1] = 1;
+				this.board[1][1] = -1;
 			
 			else{throw new IllegalArgumentException();}
 		}
 		else if(index == 5){
 			if(this.board[1][2] == 0)
-				this.board[1][2] = 1;
+				this.board[1][2] = -1;
 			
 			else{throw new IllegalArgumentException();}
 		}
 		else if(index == 6){
 			if(this.board[2][0] == 0)
-				this.board[2][0] = 1;
+				this.board[2][0] = -1;
 			
 			else{throw new IllegalArgumentException();}
 		}
 		else if(index == 7){
 			if(this.board[2][1] == 0)
-				this.board[2][1] = 1;
+				this.board[2][1] = -1;
 			
 			else{throw new IllegalArgumentException();}
 		}
 		else if(index == 8){
 			if(this.board[2][2] == 0)
-				this.board[2][2] = 1;
+				this.board[2][2] = -1;
 		
 			else{throw new IllegalArgumentException();}
 		}
@@ -283,8 +283,12 @@ class Board implements Ilayout, Cloneable {
 			for (int j = 0; j < size; j++) {
 				if (!list.contains(copy2)) {
 					if (copy2.board[i][j] == 0) {
-
-						copy2.board[i][j] = -1;
+						if (copy2.player== -1){
+							copy2.board[i][j] = 1;
+						}else{
+							copy2.board[i][j] = -1;
+						}
+						copy2.player= 2- copy2.player;
 						list.add(copy2);
 						copy2 = this.clone();
 					}

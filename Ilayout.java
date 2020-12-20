@@ -1,7 +1,7 @@
 import java.util.List;
 
 interface Ilayout {
-    /**
+	/**
      * @return the children of the receiver.
      */
     List<Ilayout> children();
@@ -13,4 +13,5 @@ interface Ilayout {
     double getG();
 	//double getH(Ilayout Goal);
     int getPlayer();
+    double getResult();
     }
