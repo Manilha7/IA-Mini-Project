@@ -59,14 +59,14 @@ class MCTS {
 		return sucs;
 	}
 
-	public static State winGameRatio(List<State> list){
+	public static State bestChild(List<State> childArray){
         State result = null;
-        double highestWinRatio = -999;
-        for (State st: list) {
-            double tmp = (double) st.totalScore / (double) st.numberOfVisits;
-            if(tmp > highestWinRatio){
-                result = st;
-                highestWinRatio = tmp;
+        double winRatio = -999;
+        for (State child: childArray) {
+			double tmp = (double) child.totalScore / (double) child.numberOfVisits;
+            if(tmp > winRatio){
+                result =child;
+                winRatio = tmp;
             }
         }
         return result;
@@ -90,7 +90,7 @@ class MCTS {
 			backpropagation(promisingNode, winscore);
 			i++;
 		}
-		State winstate=  winGameRatio(root.childArray);
+		State winstate= bestChild(root.childArray);
 		//System.out.println((Board) winstate.layout);
 		return (Board) winstate.layout ;
 	}
@@ -109,7 +109,6 @@ class MCTS {
         double uctPrevious = -1;
         for (State child: childs) {
 			double uct= uctValue(child);
-			System.out.println(uct);
             if(uct > uctPrevious){
                 result = child;
                 uctPrevious = uctValue(child);
