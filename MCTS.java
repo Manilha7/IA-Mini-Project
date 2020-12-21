@@ -77,8 +77,6 @@ class MCTS {
 
 		State root = new State(s, null);
 		State promisingNode;
-		long startTime = System.currentTimeMillis();
-		long endTime = startTime + (60 * 60 * 1000);// 1 hour
 		int i=0;
 		while (i<1000) {
 		

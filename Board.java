@@ -9,6 +9,7 @@ class Board implements Ilayout, Cloneable {
 	private int size = 3;
 	private int[][] board = new int[size][size];
 	private int player;
+	private int movecount;
 	/*
 	 * -1| 1| 1 1| -1| 1 1| 1|-1
 	 * 
@@ -29,11 +30,14 @@ class Board implements Ilayout, Cloneable {
 					if (board[i][j] != 0 && board[i][j] != 1 && board[i][j] != -1) {
 						throw new IllegalArgumentException();
 					} else {
+						if (board[i][j] == 1 && board[i][j] == -1) {
+							this.movecount++;
+						}
 						this.board = board;
 					}
 				}
 			}
-			this.player=player;
+			this.player = player;
 		} catch (IllegalArgumentException e) {
 			System.out.println("Invalid argument in table");
 			System.exit(1);
@@ -67,10 +71,6 @@ class Board implements Ilayout, Cloneable {
 		return true;
 	}
 
-	public boolean isGoal(Ilayout l) {
-		return equals(l);
-	}
-
 	public Board clone() {
 
 		Board cpy = new Board();
@@ -82,19 +82,10 @@ class Board implements Ilayout, Cloneable {
 			}
 		}
 		cpy.player=this.player;
+		cpy.movecount=this.movecount;
 		return cpy;
 	}
 
-	/**
-	 * usado para adicionar adicionar 1 sempre que se aumenta a profundidade das
-	 * geracoes
-	 * 
-	 * @return retorna 1 sempre que e chamado
-	 */
-	@Override
-	public double getG() {
-		return 1.0;
-	}
 
 	/**
 	 * imprime em formato string
@@ -141,11 +132,7 @@ class Board implements Ilayout, Cloneable {
 			sumRow=0;
 			for (int j = 0; j < cols; j++) {
 				sumRow = sumRow + copy.board[i][j];
-				//System.out.println("i= " +i+ " j="+ j+ " value= "+copy.board[i][j]);
-				//System.out.println(sumRow);
 				sumCol = sumCol + copy.board[j][i];
-				//System.out.println("i= " +i+ " j="+ j+ " value= "+copy.board[j][i]);
-				//System.out.println(sumCol);
 			}
 
 			if (sumRow == 3 || sumCol == 3) {
@@ -187,7 +174,6 @@ class Board implements Ilayout, Cloneable {
 
 			for (int i = 0, j = cols - 1; i < rows && j >= 0; i++, j--) {
 				sumAntiDiag = sumAntiDiag + copy.board[i][j];
-				//System.out.println(sumAntiDiag);
 				if (sumAntiDiag == 3) {
 					result = 1.0;
 					break;
@@ -196,7 +182,6 @@ class Board implements Ilayout, Cloneable {
 					break;
 				}
 			}
-
 		}
 
 		/*//If there´s no win after all of the possibilities then for sure the board is filled to is max and a draw is declared
@@ -209,6 +194,7 @@ class Board implements Ilayout, Cloneable {
 
 	public void makeMove(int index){
 		this.player=-1;
+		this.movecount++;
 		try{
 		
 		if(index == 0){
@@ -265,7 +251,6 @@ class Board implements Ilayout, Cloneable {
 		
 			else{throw new IllegalArgumentException();}
 		}
-
 	}
 	catch(IllegalArgumentException e){
 		Scanner scn = new Scanner(System.in);
@@ -275,7 +260,29 @@ class Board implements Ilayout, Cloneable {
 		scn.close();
 		
 	}
+	}
 
+
+
+	public void printresults(){
+		if (this.getResult()==1) {
+			System.out.println("Jogo ganho pelo Bot!");
+		}
+		if (this.getResult()==0) {
+			System.out.println("Jogo ganho pelo Player!");
+		}
+		if (this.getResult()==0.5) {
+			System.out.println("Jogo Empatado!");
+		}
+		System.exit(0);
+	}
+
+	@Override
+	public boolean endofGame(){
+		if (this.movecount < 9) {
+			return false;
+		}
+		return true;
 	}
 
 
@@ -295,6 +302,7 @@ class Board implements Ilayout, Cloneable {
 							copy2.board[i][j] = -1;
 						}
 						copy2.player= 2- copy2.player;
+						copy2.movecount++;
 						list.add(copy2);
 						copy2 = this.clone();
 					}
