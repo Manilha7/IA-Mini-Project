@@ -17,7 +17,7 @@ public class Main {
 			board.makeMove(index);
 			if (!board.endofGame()) {
 				MCTS a = new MCTS();
-				board = a.solve(board);
+				board = (Board) a.solve(board);
 				System.out.println(board);
 			}
 		}

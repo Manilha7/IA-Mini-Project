@@ -72,7 +72,7 @@ class MCTS {
         return result;
     }
 
-	public static Board solve(Ilayout s) {
+	public static Ilayout solve(Ilayout s) {
 
 
 		State root = new State(s, null);
@@ -90,7 +90,7 @@ class MCTS {
 		}
 		State winstate= bestChild(root.childArray);
 		//System.out.println((Board) winstate.layout);
-		return (Board) winstate.layout ;
+		return winstate.layout ;
 	}
 
 	public static State selectPromisingState(State rootState) {
