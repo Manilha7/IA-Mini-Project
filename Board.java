@@ -122,7 +122,7 @@ class Board implements Ilayout, Cloneable {
 		int sumCol = 0;
 		int sumDiag = 0;
 		int sumAntiDiag = 0;
-		double result = 0.5;
+		double result = 1.0;
 
 
 
@@ -136,7 +136,7 @@ class Board implements Ilayout, Cloneable {
 			}
 
 			if (sumRow == 3 || sumCol == 3) {
-				result = 1.0;
+				result = 2.0;
 				break;
 			}
 
@@ -149,7 +149,7 @@ class Board implements Ilayout, Cloneable {
 
 
 		//If no win on a row or a column then check the diagonal
-		if (result == 0.5) {
+		if (result == 1.0) {
 			for (int i = 0; i < rows; i++) {
 				for (int j = 0; j < cols; j++) {
 					if (i == j) {
@@ -158,7 +158,7 @@ class Board implements Ilayout, Cloneable {
 					}
 
 					if (sumDiag == 3) {
-						result = 1.0;
+						result = 2.0;
 						break;
 					} else if (sumDiag == -3) {
 						result = 0.0;
@@ -170,12 +170,12 @@ class Board implements Ilayout, Cloneable {
 		}
 
 		//If the diagonal neither have a win for someone then the anti-diagonal is checked
-		if (result == 0.5) {
+		if (result == 1.0) {
 
 			for (int i = 0, j = cols - 1; i < rows && j >= 0; i++, j--) {
 				sumAntiDiag = sumAntiDiag + copy.board[i][j];
 				if (sumAntiDiag == 3) {
-					result = 1.0;
+					result = 2.0;
 					break;
 				} else if (sumAntiDiag == -3) {
 					result = 0.0;
@@ -300,6 +300,12 @@ class Board implements Ilayout, Cloneable {
 							copy2.board[i][j] = 1;
 						}else{
 							copy2.board[i][j] = -1;
+						}
+						if (copy2.player==1) {
+							copy2.player=-1;
+						}
+						else{
+							copy2.player=1;
 						}
 						copy2.movecount++;
 						list.add(copy2);

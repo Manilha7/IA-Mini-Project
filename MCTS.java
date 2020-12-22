@@ -85,9 +85,9 @@ class MCTS {
 			promisingNode = selectPromisingState(root);
 			//System.out.println((Board) promisingNode.layout);
 			expansion(promisingNode);
-			double winscore = simulation(promisingNode);
+			State ts = simulation(promisingNode);
 			//System.out.println(winscore);
-			backpropagation(promisingNode, winscore);
+			backpropagation(promisingNode, ts);
 			i++;
 		}
 		State winstate= bestChild(root.childArray);
@@ -131,7 +131,7 @@ class MCTS {
 
 
 	
-	private static double simulation(State child) {
+	private static State simulation(State child) {
 		double winscore = child.layout.getResult();
 		//System.out.println(winscore);
 			Random rand = new Random();
@@ -146,12 +146,25 @@ class MCTS {
 		}
 		//System.out.println((Board) ts.layout);
 		//System.out.println(winscore);
-		return winscore;
+		return ts;
 	}
 
-	private static void backpropagation(State promisingNode, double winscore) {
-		promisingNode.numberOfVisits++;
-		promisingNode.totalScore += winscore;
+	private static void backpropagation(State promisingNode, State ts) {
+		double winscore= ts.layout.getResult();
+		if (ts.father==promisingNode) {
+			if (winscore== 0) {
+				promisingNode.numberOfVisits++;
+				promisingNode.totalScore += Double.MIN_VALUE;
+			}
+			else{
+				promisingNode.numberOfVisits++;
+				promisingNode.totalScore += Double.MAX_VALUE;
+			}
+		}
+		else{
+			promisingNode.numberOfVisits++;
+			promisingNode.totalScore += winscore;
+		}
 		while( promisingNode.father !=null){
 			promisingNode=promisingNode.father;
 			promisingNode.numberOfVisits++;
