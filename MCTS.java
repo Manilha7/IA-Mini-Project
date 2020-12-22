@@ -74,11 +74,7 @@ class MCTS {
         return result;
     }
 
-<<<<<<< HEAD
 	public Ilayout solve(Ilayout s) {
-=======
-	public static Board solve(Ilayout s) {
->>>>>>> parent of 60f6e4d... up change return solve
 
 
 		State root = new State(s, null);
