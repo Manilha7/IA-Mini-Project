@@ -63,7 +63,9 @@ class MCTS {
         State result = null;
         double winRatio = -999;
         for (State child: childArray) {
+			System.out.println((Board) child.layout);
 			double tmp = (double) child.totalScore / (double) child.numberOfVisits;
+			System.out.println(tmp);
             if(tmp > winRatio){
                 result =child;
                 winRatio = tmp;
@@ -72,7 +74,7 @@ class MCTS {
         return result;
     }
 
-	public static Ilayout solve(Ilayout s) {
+	public Ilayout solve(Ilayout s) {
 
 
 		State root = new State(s, null);
@@ -122,7 +124,7 @@ class MCTS {
 		if (nodeVisits == 0) {
 			return Double.MAX_VALUE;
 		}
-		return (child.totalScore / nodeVisits) + 1.41 * Math.sqrt(Math.log(parentVisit) / nodeVisits);
+		return (child.totalScore / nodeVisits) + Math.sqrt(Math.log(parentVisit) / nodeVisits);
 	}
 
 	

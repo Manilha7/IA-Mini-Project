@@ -15,9 +15,11 @@ public class Main {
 			System.out.println("Qual a sua jogada: ");
 			int index = sc.nextInt();
 			board.makeMove(index);
+			System.out.println(board);
 			if (!board.endofGame()) {
 				MCTS a = new MCTS();
 				board = (Board) a.solve(board);
+				System.out.println("Jogada do Bot");
 				System.out.println(board);
 			}
 		}
