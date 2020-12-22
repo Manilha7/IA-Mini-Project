@@ -21,6 +21,7 @@ public class Main {
 				System.out.println(board);
 			}
 		}
+		sc.close();
 		System.out.println("Board Final: ");
 		System.out.println(board);
 		board.printresults();
