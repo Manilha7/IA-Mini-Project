@@ -74,7 +74,11 @@ class MCTS {
         return result;
     }
 
+<<<<<<< HEAD
 	public Ilayout solve(Ilayout s) {
+=======
+	public static Board solve(Ilayout s) {
+>>>>>>> parent of 60f6e4d... up change return solve
 
 
 		State root = new State(s, null);
@@ -92,7 +96,7 @@ class MCTS {
 		}
 		State winstate= bestChild(root.childArray);
 		//System.out.println((Board) winstate.layout);
-		return winstate.layout ;
+		return (Board) winstate.layout ;
 	}
 
 	public static State selectPromisingState(State rootState) {
