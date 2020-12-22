@@ -124,7 +124,7 @@ class MCTS {
 		if (nodeVisits == 0) {
 			return Double.MAX_VALUE;
 		}
-		return (child.totalScore / nodeVisits) + Math.sqrt(Math.log(parentVisit) / nodeVisits);
+		return (child.totalScore / nodeVisits) + 1.41* Math.sqrt(Math.log(parentVisit) / nodeVisits);
 	}
 
 	
@@ -151,20 +151,8 @@ class MCTS {
 
 	private static void backpropagation(State promisingNode, State ts) {
 		double winscore= ts.layout.getResult();
-		if (ts.father==promisingNode) {
-			if (winscore== 0) {
-				promisingNode.numberOfVisits++;
-				promisingNode.totalScore += Double.MIN_VALUE;
-			}
-			else{
-				promisingNode.numberOfVisits++;
-				promisingNode.totalScore += Double.MAX_VALUE;
-			}
-		}
-		else{
 			promisingNode.numberOfVisits++;
 			promisingNode.totalScore += winscore;
-		}
 		while( promisingNode.father !=null){
 			promisingNode=promisingNode.father;
 			promisingNode.numberOfVisits++;

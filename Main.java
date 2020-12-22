@@ -11,7 +11,7 @@ public class Main {
 		// System.out.println(board.getResult());
 		Board board = new Board();
 		Scanner sc = new Scanner(System.in);
-		while (board.getResult() == 1 && !board.endofGame()) {
+		while (board.getResult() == 0.5 && !board.endofGame()) {
 			System.out.println("Qual a sua jogada: ");
 			int index = sc.nextInt();
 			board.makeMove(index);
