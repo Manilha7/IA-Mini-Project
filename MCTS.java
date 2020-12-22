@@ -63,9 +63,8 @@ class MCTS {
         State result = null;
         double winRatio = -999;
         for (State child: childArray) {
-			System.out.println((Board) child.layout);
-			double tmp = (child.totalScore / child.numberOfVisits) + 1.41* Math.sqrt(Math.log(child.father.numberOfVisits) / child.numberOfVisits);
-			System.out.println(child.totalScore +"/"+child.numberOfVisits);
+			//System.out.println((Board) child.layout);
+			double tmp = child.totalScore / child.numberOfVisits;
             if(tmp > winRatio){
                 result =child;
                 winRatio = tmp;
