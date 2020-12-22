@@ -301,7 +301,6 @@ class Board implements Ilayout, Cloneable {
 						}else{
 							copy2.board[i][j] = -1;
 						}
-						copy2.player= 2- copy2.player;
 						copy2.movecount++;
 						list.add(copy2);
 						copy2 = this.clone();
