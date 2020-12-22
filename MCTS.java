@@ -64,8 +64,8 @@ class MCTS {
         double winRatio = -999;
         for (State child: childArray) {
 			System.out.println((Board) child.layout);
-			double tmp = (double) child.totalScore / (double) child.numberOfVisits;
-			System.out.println(tmp);
+			double tmp = (child.totalScore / child.numberOfVisits) + 1.41* Math.sqrt(Math.log(child.father.numberOfVisits) / child.numberOfVisits);
+			System.out.println(child.totalScore +"/"+child.numberOfVisits);
             if(tmp > winRatio){
                 result =child;
                 winRatio = tmp;
@@ -150,11 +150,11 @@ class MCTS {
 	}
 
 	private static void backpropagation(State promisingNode, State ts) {
-		double winscore= ts.layout.getResult();
-			promisingNode.numberOfVisits++;
-			promisingNode.totalScore += winscore;
-		while( promisingNode.father !=null){
-			promisingNode=promisingNode.father;
+		double winscore = ts.layout.getResult();
+		promisingNode.numberOfVisits++;
+		promisingNode.totalScore += winscore;
+		while (promisingNode.father != null) {
+			promisingNode = promisingNode.father;
 			promisingNode.numberOfVisits++;
 			promisingNode.totalScore += winscore;
 		}
