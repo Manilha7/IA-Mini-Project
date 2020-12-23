@@ -141,7 +141,7 @@ class Board implements Ilayout, Cloneable {
 			}
 
 			else if (sumRow == -3 || sumCol == -3) {
-				result = -1.0;
+				result = 0.0;
 				break;
 			}
 
@@ -161,7 +161,7 @@ class Board implements Ilayout, Cloneable {
 						result = 1.0;
 						break;
 					} else if (sumDiag == -3) {
-						result = -1.0;
+						result = 0.0;
 						break;
 					}
 
@@ -178,7 +178,7 @@ class Board implements Ilayout, Cloneable {
 					result = 1.0;
 					break;
 				} else if (sumAntiDiag == -3) {
-					result = -1.0;
+					result = 0.0;
 					break;
 				}
 			}
