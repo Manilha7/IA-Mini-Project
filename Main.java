@@ -20,7 +20,7 @@ public class Main {
 			board = (Board) a.solve(board);
 			System.out.println("Jogada do Bot");
 			System.out.println(board);
-			if (!board.endofGame()) {
+			if (!board.endofGame() && board.getResult() == 0.5) {
 				System.out.println("Qual a sua jogada: ");
 				int index = sc.nextInt();
 				board.makeMove(index);
