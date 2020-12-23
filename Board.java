@@ -59,6 +59,11 @@ class Board implements Ilayout, Cloneable {
 		return this.player;
 	}
 
+	public void setPlayer(int player) {
+		this.player= player;
+	}
+
+
 	@Override
 	public boolean equals(Object t) {
 		int[][] l1 = ((Board) t).board;

@@ -8,6 +8,7 @@ interface Ilayout {
 
     boolean endofGame();
 
+    void setPlayer(int player);
     int getPlayer();
     double getResult();
     }

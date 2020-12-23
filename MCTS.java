@@ -79,6 +79,7 @@ class MCTS {
 		State root = new State(s, null);
 		State promisingNode;
 		int i=0;
+		root.layout.setPlayer(-1);
 		while (i<1000) {
 		
 			promisingNode = selectPromisingState(root);
