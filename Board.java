@@ -105,10 +105,10 @@ class Board implements Ilayout, Cloneable {
 		for (int i = 0; i < size; i++) {
 			for (int j = 0; j < size; j++) {
 				if (board[i][j] == -1)
-					result += "X ";
+					result += "O ";
 
 				else if (board[i][j] == 1)
-					result += "O ";
+					result += "X ";
 
 				else
 					result += "- ";
