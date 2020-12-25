@@ -61,7 +61,7 @@ class MCTS {
 
 	public static State bestChild(List<State> childArray){
         State result = null;
-        double winRatio = -999;
+        double winRatio = Double.MIN_VALUE;
         for (State child: childArray) {
 			//System.out.println((Board) child.layout);
 			double tmp = child.totalScore / child.numberOfVisits;
