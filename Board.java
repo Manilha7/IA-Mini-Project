@@ -284,7 +284,7 @@ class Board implements Ilayout, Cloneable {
 
 	@Override
 	public boolean endofGame(){
-		if (this.movecount <= 9) {
+		if (this.movecount < 9) {
 			return false;
 		}
 		return true;
