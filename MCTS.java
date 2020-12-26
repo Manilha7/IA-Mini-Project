@@ -1,5 +1,5 @@
 import java.util.ArrayList;
-import java.util.Random; 
+import java.util.Random;
 import java.util.List;
 
 class MCTS {
@@ -80,15 +80,17 @@ class MCTS {
 		State root = new State(s, null);
 		State promisingNode;
 		int i=0;
+		List<State> childs;
 		root.layout.setPlayer(-1);
 		while (i<1000) {
 		
 			promisingNode = selectPromisingState(root);
 			//System.out.println((Board) promisingNode.layout);
-			expansion(promisingNode);
-			State ts = simulation(promisingNode);
+			childs =expansion(promisingNode);
+			List<State> values;
+			values= simulation(childs);
 			//System.out.println(winscore);
-			backpropagation(promisingNode, ts);
+			backpropagation(childs, values);
 			i++;
 		}
 		State winstate= bestChild(root.childArray);
@@ -125,20 +127,22 @@ class MCTS {
 		if (nodeVisits == 0) {
 			return Double.MAX_VALUE;
 		}
-		return ((child.totalScore / nodeVisits) + 1.41* Math.sqrt(Math.log(parentVisit) / nodeVisits));
+		return ((child.totalScore / nodeVisits) + Math.sqrt(2)* Math.sqrt(Math.log(parentVisit) / nodeVisits));
 	}
 
 	
 
 
 	
-	private static State simulation(State child) {
-		double winscore = child.layout.getResult();
+	private static List<State> simulation(List<State> childs) {
+		List<State> winlist= new ArrayList<>();
+		for (State state : childs) {
+			double winscore = state.layout.getResult();
 		//System.out.println(winscore);
 			Random rand = new Random();
-			List<Ilayout> temporarychilds = child.layout.children();
-			State ts = child;
-			while (temporarychilds.size() != 0 && winscore == 0.5) {
+			List<Ilayout> temporarychilds = state.layout.children();
+			State ts = state;
+			while (temporarychilds.size() > 0 && winscore == 0.5) {
 				ts = new State(temporarychilds.get(rand.nextInt(temporarychilds.size())), ts);
 				winscore = ts.layout.getResult();
 				//System.out.println((Board) ts.layout);
@@ -146,46 +150,51 @@ class MCTS {
 				//System.out.println("top: "+ts.layout.getPlayer());
 				temporarychilds = ts.layout.children();
 		}
+		winlist.add(ts);
+		}
 		//System.out.println((Board) ts.layout);
 		//System.out.println(winscore);
-		return ts;
+		return winlist;
 	}
 
-	private static void backpropagation(State promisingNode, State ts) {
-		double winscore = ts.layout.getResult();
-		promisingNode.numberOfVisits++;
-		if (promisingNode.layout.getPlayer()==1.0 && winscore==1.0) {
-			promisingNode.totalScore += winscore;
-		}
-		if (promisingNode.layout.getPlayer()==-1.0 && winscore==0.0) {
-			promisingNode.totalScore ++;
-		}
-		if (winscore==0.5) {
-			promisingNode.totalScore+=winscore;
-		}
-
-		while (promisingNode.father != null) {
-			promisingNode = promisingNode.father;
-			promisingNode.numberOfVisits++;
-			if (promisingNode.layout.getPlayer()==1.0 && winscore==1.0) {
-				promisingNode.totalScore += winscore;
-			}
-			if (promisingNode.layout.getPlayer()==-1.0 && winscore==0.0) {
-				promisingNode.totalScore ++;
-			}
-			if (winscore==0.5) {
-				promisingNode.totalScore+=winscore;
-			}
+	private static void backpropagation(List<State> childs, List<State> values) {
 	
+		for (int i = 0; i < childs.size(); i++) {
+			childs.get(i).numberOfVisits++;
+			double winscore = values.get(i).layout.getResult();
+			if (childs.get(i).layout.getPlayer() == 1.0 && winscore == 1.0) {
+				childs.get(i).totalScore++;
+			}
+			if (childs.get(i).layout.getPlayer() == -1.0 && winscore == 0.0) {
+				childs.get(i).totalScore++;
+			}
+			if (winscore == 0.5) {
+				childs.get(i).totalScore += winscore;
+			}
+			State state = childs.get(i);
+			while (state.father != null) {
+				state = state.father;
+				state.numberOfVisits++;
+				if (state.layout.getPlayer() == 1.0 && winscore == 1.0) {
+					state.totalScore++;
+				}
+				if (state.layout.getPlayer() == -1.0 && winscore == 0.0) {
+					state.totalScore++;
+				}
+				if (winscore == 0.5) {
+					state.totalScore += winscore;
+				}
+
+			}
 		}
 	}
 
 
 
 
-	public static void expansion(State promState) {
-		//System.out.println("top: "+ promState.layout.getPlayer());
+	public static List<State> expansion(State promState) {
 		List<State> sucs = sucessors(promState);
 		promState.setChildArray(sucs);
+		return sucs;
 	}
 }
