@@ -10,10 +10,10 @@ public class Main {
 		// Board board = new Board(m,-1);
 		// System.out.println(board.getResult());
 		// int m[][]= {{-1,0,0},
-		// 			{0,1,0},
-		// 			{0,0,0}};
+		// {0,1,0},
+		// {0,0,0}};
 		// Board board = new Board(m, -1);
-		Board board= new Board();
+		Board board = new Board();
 		Scanner sc = new Scanner(System.in);
 		while (board.getResult() == 0.5 && !board.endofGame()) {
 			MCTS a = new MCTS();

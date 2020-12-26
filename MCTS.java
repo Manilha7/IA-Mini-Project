@@ -61,10 +61,11 @@ class MCTS {
 
 	public static State bestChild(List<State> childArray){
         State result = null;
-        double winRatio = -999;
+        double winRatio = Double.MIN_VALUE;
         for (State child: childArray) {
-			//System.out.println((Board) child.layout);
+			System.out.println((Board) child.layout);
 			double tmp = child.totalScore / child.numberOfVisits;
+			System.out.println(tmp);
             if(tmp > winRatio){
                 result =child;
                 winRatio = tmp;
@@ -92,7 +93,7 @@ class MCTS {
 		}
 		State winstate= bestChild(root.childArray);
 		//System.out.println((Board) winstate.layout);
-		return (Board) winstate.layout ;
+		return winstate.layout ;
 	}
 
 	public static State selectPromisingState(State rootState) {
@@ -124,7 +125,7 @@ class MCTS {
 		if (nodeVisits == 0) {
 			return Double.MAX_VALUE;
 		}
-		return (child.totalScore / nodeVisits) + 1.41* Math.sqrt(Math.log(parentVisit) / nodeVisits);
+		return ((child.totalScore / nodeVisits) + 1.41* Math.sqrt(Math.log(parentVisit) / nodeVisits));
 	}
 
 	
@@ -142,6 +143,7 @@ class MCTS {
 				winscore = ts.layout.getResult();
 				//System.out.println((Board) ts.layout);
 				//System.out.println(winscore);
+				//System.out.println("top: "+ts.layout.getPlayer());
 				temporarychilds = ts.layout.children();
 		}
 		//System.out.println((Board) ts.layout);
@@ -152,11 +154,29 @@ class MCTS {
 	private static void backpropagation(State promisingNode, State ts) {
 		double winscore = ts.layout.getResult();
 		promisingNode.numberOfVisits++;
-		promisingNode.totalScore += winscore;
+		if (promisingNode.layout.getPlayer()==1.0 && winscore==1.0) {
+			promisingNode.totalScore += winscore;
+		}
+		if (promisingNode.layout.getPlayer()==-1.0 && winscore==0.0) {
+			promisingNode.totalScore ++;
+		}
+		if (winscore==0.5) {
+			promisingNode.totalScore+=winscore;
+		}
+
 		while (promisingNode.father != null) {
 			promisingNode = promisingNode.father;
 			promisingNode.numberOfVisits++;
-			promisingNode.totalScore += winscore;
+			if (promisingNode.layout.getPlayer()==1.0 && winscore==1.0) {
+				promisingNode.totalScore += winscore;
+			}
+			if (promisingNode.layout.getPlayer()==-1.0 && winscore==0.0) {
+				promisingNode.totalScore ++;
+			}
+			if (winscore==0.5) {
+				promisingNode.totalScore+=winscore;
+			}
+	
 		}
 	}
 
@@ -164,6 +184,7 @@ class MCTS {
 
 
 	public static void expansion(State promState) {
+		//System.out.println("top: "+ promState.layout.getPlayer());
 		List<State> sucs = sucessors(promState);
 		promState.setChildArray(sucs);
 	}

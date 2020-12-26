@@ -284,7 +284,7 @@ class Board implements Ilayout, Cloneable {
 
 	@Override
 	public boolean endofGame(){
-		if (this.movecount < 9) {
+		if (this.movecount <= 9) {
 			return false;
 		}
 		return true;
@@ -307,14 +307,15 @@ class Board implements Ilayout, Cloneable {
 							copy2.board[i][j] = -1;
 						}
 						if (copy2.player==1) {
-							copy2.player=-1;
-						}
-						else{
-							copy2.player=1;
+							copy2.setPlayer(-1);
+						}else{
+							copy2.setPlayer(1);
 						}
 						copy2.movecount++;
+						//System.out.println(copy2.getPlayer());
 						list.add(copy2);
 						copy2 = this.clone();
+						//System.out.println(copy2.player);
 					}
 				}
 			}
