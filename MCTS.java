@@ -14,7 +14,7 @@ class MCTS {
 		}
 
 		public State(Ilayout l, State father) {
-			this.setFather(father);
+			this.father=father;
 			this.layout = l;
 			this.childArray = new ArrayList<>();
 		}
@@ -45,21 +45,13 @@ class MCTS {
 		public String toString() {
 			return layout.toString();
 		}
-
-		public State getFather() {
-			return father;
-		}
-
-		public void setFather(State father) {
-			this.father = father;
-		}
 	}
 
 	final private static List<State> sucessors(State n) {
 		List<State> sucs = new ArrayList<>();
 		List<Ilayout> children = n.layout.children();
 		for (Ilayout e : children) {
-			if (n.getFather() == null || !e.equals(n.getFather().layout)) {
+			if (n.father == null || !e.equals(n.father.layout)) {
 				State nn = new State(e, n);
 				sucs.add(nn);
 			}
@@ -127,7 +119,7 @@ class MCTS {
 
 
 	public static double uctValue(State child) {
-		double parentVisit = child.getFather().numberOfVisits;
+		double parentVisit = child.father.numberOfVisits;
 		double nodeVisits = child.numberOfVisits;
 		if (nodeVisits == 0) {
 			return Double.MAX_VALUE;
@@ -161,8 +153,8 @@ class MCTS {
 		double winscore = ts.layout.getResult();
 		promisingNode.numberOfVisits++;
 		promisingNode.totalScore += winscore;
-		while (promisingNode.getFather() != null) {
-			promisingNode = promisingNode.getFather();
+		while (promisingNode.father != null) {
+			promisingNode = promisingNode.father;
 			promisingNode.numberOfVisits++;
 			promisingNode.totalScore += winscore;
 		}
