@@ -92,7 +92,7 @@ class MCTS {
 		}
 		State winstate= bestChild(root.childArray);
 		//System.out.println((Board) winstate.layout);
-		return (Board) winstate.layout ;
+		return winstate.layout ;
 	}
 
 	public static State selectPromisingState(State rootState) {
