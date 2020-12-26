@@ -16,14 +16,14 @@ public class Main {
 		Board board = new Board();
 		Scanner sc = new Scanner(System.in);
 		while (board.getResult() == 0.5 && !board.endofGame()) {
-			MCTS a = new MCTS();
-			board = (Board) a.solve(board);
-			System.out.println("Jogada do Bot");
-			System.out.println(board);
-			if (!board.endofGame() && board.getResult() == 0.5) {
-				System.out.println("Qual a sua jogada: ");
+			System.out.println("Qual a sua jogada: ");
 				int index = sc.nextInt();
 				board.makeMove(index);
+				System.out.println(board);
+			if (!board.endofGame() && board.getResult() == 0.5) {
+				MCTS a = new MCTS();
+				board = (Board) a.solve(board);
+				System.out.println("Jogada do Bot");
 				System.out.println(board);
 			}
 		}
