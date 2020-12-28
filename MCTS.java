@@ -64,7 +64,7 @@ class MCTS {
         double winRatio = Double.MIN_VALUE;
         for (State child: childArray) {
 			//System.out.println((Board) child.layout);
-			double tmp = child.totalScore / child.numberOfVisits;
+			double tmp = child.numberOfVisits;
 			//System.out.println(tmp);
             if(tmp > winRatio){
                 result =child;
@@ -166,13 +166,13 @@ class MCTS {
 			if (nodeVisits == 0) {
 				result= Double.MIN_VALUE;
 			}
-			result = ((child.totalScore / nodeVisits) + 1.3 * Math.sqrt(Math.log(parentVisit) / nodeVisits));
+			result = ((child.totalScore / nodeVisits) + 0.5 * Math.sqrt(Math.log(parentVisit) / nodeVisits));
 		}
 		else if (minOrmax== 'M') {
 			if (nodeVisits == 0) {
 				result= Double.MAX_VALUE;
 			}
-			result= ((child.totalScore / nodeVisits) + 1.3 * Math.sqrt(Math.log(parentVisit) / nodeVisits));
+			result= ((child.totalScore / nodeVisits) + 0.5 * Math.sqrt(Math.log(parentVisit) / nodeVisits));
 		}
 		return result;
 	}

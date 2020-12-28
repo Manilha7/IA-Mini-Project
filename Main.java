@@ -17,14 +17,14 @@ public class Main {
 		int emp = 0;
 		int first = 0;
 		int second = 0;
-		while (i < 10) {
+		while (i < 100) {
 			Board board = new Board();
 			// Scanner sc = new Scanner(System.in);
 			char opponent = 'P';
 			while (board.getResult() == 'E' && !board.endofGame()) {
 				MCTS a = new MCTS();
 				board = (Board) a.solve(board, opponent);
-				System.out.println(board);
+				//System.out.println(board);
 				if (opponent == 'B') {
 					opponent = 'P';
 				} else if (opponent == 'P') {
@@ -35,7 +35,7 @@ public class Main {
 
 			}
 			//System.out.println(board.getResult());
-			System.out.println("------------");
+			//System.out.println("------------");
 			// System.out.println(board);
 			// sc.close();
 			// System.out.println("Board Final: ");
