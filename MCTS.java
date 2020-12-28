@@ -102,7 +102,7 @@ class MCTS {
 			i++;
 		}
 		State winstate= bestChild(root.childArray);
-		System.out.println("Winstate:" + winstate.layout);
+		//System.out.println("Winstate:" + winstate.layout);
 		return winstate.layout ;
 	}
 
@@ -166,13 +166,13 @@ class MCTS {
 			if (nodeVisits == 0) {
 				result= Double.MIN_VALUE;
 			}
-			result = ((child.totalScore / nodeVisits) + 0.5 * Math.sqrt(Math.log(parentVisit) / nodeVisits));
+			result = ((child.totalScore / nodeVisits) + 0.3 * Math.sqrt(Math.log(parentVisit) / nodeVisits));
 		}
 		else if (minOrmax== 'M') {
 			if (nodeVisits == 0) {
 				result= Double.MAX_VALUE;
 			}
-			result= ((child.totalScore / nodeVisits) + 0.5 * Math.sqrt(Math.log(parentVisit) / nodeVisits));
+			result= ((child.totalScore / nodeVisits) + 0.3 * Math.sqrt(Math.log(parentVisit) / nodeVisits));
 		}
 		return result;
 	}
