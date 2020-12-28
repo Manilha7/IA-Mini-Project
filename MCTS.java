@@ -89,7 +89,7 @@ class MCTS {
 		else{
 			player='B';
 		}
-		while (i<1000) {
+		while (i<10000) {
 		
 			promisingNode = selectPromisingState(root, player);
 			//System.out.println((Board) promisingNode.layout);
@@ -103,6 +103,8 @@ class MCTS {
 		}
 		State winstate= bestChild(root.childArray);
 		//System.out.println("Winstate:" + winstate.layout);
+		//System.out.println("nv: "+ root.numberOfVisits );
+		//System.out.println("win: "+ root.totalScore );
 		return winstate.layout ;
 	}
 

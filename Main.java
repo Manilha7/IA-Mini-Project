@@ -39,7 +39,7 @@ import java.util.Scanner;
 // 			// System.out.println(board);
 // 			// sc.close();
 // 			// System.out.println("Board Final: ");
-// 			// System.out.println(board);
+// 			//System.out.println(board);
 // 			// board.printresults();
 // 			if (board.getResult() == 'E')
 // 				emp++;
