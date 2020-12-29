@@ -1,4 +1,4 @@
-/*import static org.junit.Assert.*;
+import static org.junit.Assert.*;
 
 import org.junit.Test;
 
@@ -7,7 +7,7 @@ public class Tests {
 	@Test
 	public void test1_construtorState() {
 			int m[][]= {{0,0,0},{0,0,0},{0,0,0}};
-			Board b= new Board(m,-1);
+			Board b= new Board(m,'P');
 			MCTS.State s= new MCTS.State(b,null);
 			assertEquals(s.getFather(), null);
 			assertEquals((Board) s.getLayout(),b);
@@ -16,7 +16,7 @@ public class Tests {
 	@Test
 	public void test2_construtorState() {
 			int m[][]= {{0,-1,0},{1,0,0},{0,0,0}};
-			Board b= new Board(m,1);
+			Board b= new Board(m,'B');
 			MCTS.State s= new MCTS.State(b,null);
 			assertEquals(s.getFather(), null);
 			assertEquals((Board) s.getLayout(),b);
@@ -26,8 +26,8 @@ public class Tests {
 	public void test3_construtorState() {
 			int m[][]= {{0,1,0},{-1,0,0},{0,0,0}};
 			int m1[][]= {{0,1,0},{-1,0,1},{0,0,0}};
-			Board b= new Board(m,-1);
-			Board b1= new Board(m1,1);
+			Board b= new Board(m,'P');
+			Board b1= new Board(m1,'B');
 			MCTS.State s= new MCTS.State(b,null);
 			MCTS.State s1= new MCTS.State(b1,s);
 			assertEquals(s.getFather(), null);
@@ -38,42 +38,41 @@ public class Tests {
 	
 	@Test
 	public void test1_solve() {
-			int m[][]= {{-1,0,0},{1,1,1},{-1,0,0}};
-			int m1[][]= {{-1,0,0},{1,1,0},{-1,0,0}};
-			Board b= new Board(m,1);
-			Board b2= new Board(m1,-1);
+			int m[][]= {{-1,0,0},{-1,1,0},{1,0,0}};
+			int m1[][]= {{-1,0,0},{-1,1,0},{0,0,0}};
+			Board b= new Board(m,'B');
+			Board b2= new Board(m1,'P');
 			MCTS mcts= new MCTS();
-			assertEquals(b,((Board) mcts.solve(b2)));
+			assertEquals(b,((Board) mcts.solve(b2,'P')));
 		}
 	
 	@Test
 	public void test2_solve() {
 			int m[][]= {{-1,-1,1},{1,1,-1},{1,0,0}};
 			int m1[][]= {{-1,-1,0},{1,1,-1},{1,0,0}};
-			Board b= new Board(m,1);
-			Board b2= new Board(m1,-1);
+			Board b= new Board(m,'B');
+			Board b2= new Board(m1,'P');
 			MCTS mcts= new MCTS();
-			assertEquals(b,((Board) mcts.solve(b2)));
+			assertEquals(b,((Board) mcts.solve(b2,'P')));
 		}
 	
 	@Test
 	public void test3_solve() {
 			int m[][]= {{-1,-1,1},{1,1,-1},{1,0,0}};
 			int m1[][]= {{-1,-1,0},{1,1,-1},{1,0,0}};
-			Board b= new Board(m,1);
-			Board b2= new Board(m1,-1);
+			Board b= new Board(m,'B');
+			Board b2= new Board(m1,'P');
 			MCTS mcts= new MCTS();
-			assertEquals(b,((Board) mcts.solve(b2)));
+			assertEquals(b,((Board) mcts.solve(b2,'P')));
 		}
 	
 	@Test
 	public void test_backpropagacion() {
 			int m[][]= {{-1,-1,1},{1,1,-1},{1,0,0}};
 			int m1[][]= {{-1,-1,0},{1,1,-1},{1,0,0}};
-			Board b= new Board(m,1);
-			Board b2= new Board(m1,-1);
+			Board b= new Board(m,'B');
+			Board b2= new Board(m1,'P');
 			MCTS mcts= new MCTS();
-			assertEquals(b,((Board) mcts.solve(b2)));
+			assertEquals(b,((Board) mcts.solve(b2,'P')));
 		}
 }
-*/

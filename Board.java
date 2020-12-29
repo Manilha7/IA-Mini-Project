@@ -8,7 +8,7 @@ class Board implements Ilayout, Cloneable {
 
 	private int size = 3;
 	private int[][] board = new int[size][size];
-	private int player;
+	private char player;
 	private int movecount;
 	/*
 	 * -1| 1| 1 1| -1| 1 1| 1|-1
@@ -21,7 +21,7 @@ class Board implements Ilayout, Cloneable {
 	 * 
 	 */
 
-	public Board(int[][] board, int player) {
+	public Board(int[][] board, char player) {
 
 		try {
 
@@ -55,11 +55,11 @@ class Board implements Ilayout, Cloneable {
 		this.board = board;
 	}
 	
-	public int getPlayer() {
+	public char getPlayer() {
 		return this.player;
 	}
 
-	public void setPlayer(int player) {
+	public void setPlayer(char player) {
 		this.player= player;
 	}
 
@@ -79,11 +79,10 @@ class Board implements Ilayout, Cloneable {
 	public Board clone() {
 
 		Board cpy = new Board();
-		Board cpy2 = new Board(this.board,this.player);
 
 		for (int i = 0; i < size; i++) {
 			for (int j = 0; j < size; j++) {
-				cpy.board[i][j] = cpy2.board[i][j];
+				cpy.board[i][j] = this.board[i][j];
 			}
 		}
 		cpy.player=this.player;
@@ -118,7 +117,7 @@ class Board implements Ilayout, Cloneable {
 		return result;
 	}
 
-	public double getResult() {
+	public char getResult() {
 
 		Board copy = this.clone();
 		int rows = copy.board.length;
@@ -127,7 +126,7 @@ class Board implements Ilayout, Cloneable {
 		int sumCol = 0;
 		int sumDiag = 0;
 		int sumAntiDiag = 0;
-		double result = 0.5;
+		char result = 'E';
 
 
 
@@ -141,12 +140,12 @@ class Board implements Ilayout, Cloneable {
 			}
 
 			if (sumRow == 3 || sumCol == 3) {
-				result = 1.0;
+				result = 'B';
 				break;
 			}
 
 			else if (sumRow == -3 || sumCol == -3) {
-				result = 0.0;
+				result = 'P';
 				break;
 			}
 
@@ -154,7 +153,7 @@ class Board implements Ilayout, Cloneable {
 
 
 		//If no win on a row or a column then check the diagonal
-		if (result == 0.5) {
+		if (result == 'E') {
 			for (int i = 0; i < rows; i++) {
 				for (int j = 0; j < cols; j++) {
 					if (i == j) {
@@ -163,10 +162,10 @@ class Board implements Ilayout, Cloneable {
 					}
 
 					if (sumDiag == 3) {
-						result = 1.0;
+						result = 'B';
 						break;
 					} else if (sumDiag == -3) {
-						result = 0.0;
+						result = 'P';
 						break;
 					}
 
@@ -175,15 +174,15 @@ class Board implements Ilayout, Cloneable {
 		}
 
 		//If the diagonal neither have a win for someone then the anti-diagonal is checked
-		if (result == 0.5) {
+		if (result == 'E') {
 
 			for (int i = 0, j = cols - 1; i < rows && j >= 0; i++, j--) {
 				sumAntiDiag = sumAntiDiag + copy.board[i][j];
 				if (sumAntiDiag == 3) {
-					result = 1.0;
+					result = 'B';
 					break;
 				} else if (sumAntiDiag == -3) {
-					result = 0.0;
+					result = 'P';
 					break;
 				}
 			}
@@ -198,7 +197,7 @@ class Board implements Ilayout, Cloneable {
 	}
 
 	public void makeMove(int index){
-		this.player=-1;
+		this.player='P';
 		this.movecount++;
 		try{
 		
@@ -270,13 +269,13 @@ class Board implements Ilayout, Cloneable {
 
 
 	public void printresults(){
-		if (this.getResult()==1) {
+		if (this.getResult()=='B') {
 			System.out.println("Jogo ganho pelo Bot!");
 		}
-		if (this.getResult()==0) {
+		if (this.getResult()=='P') {
 			System.out.println("Jogo ganho pelo Player!");
 		}
-		if (this.getResult()==0.5) {
+		if (this.getResult()=='E') {
 			System.out.println("Jogo Empatado!");
 		}
 		System.exit(0);
@@ -301,15 +300,15 @@ class Board implements Ilayout, Cloneable {
 			for (int j = 0; j < size; j++) {
 				if (!list.contains(copy2)) {
 					if (copy2.board[i][j] == 0) {
-						if (copy2.player== -1){
+						if (copy2.player== 'P'){
 							copy2.board[i][j] = 1;
 						}else{
 							copy2.board[i][j] = -1;
 						}
-						if (copy2.player==1) {
-							copy2.setPlayer(-1);
+						if (copy2.player=='B') {
+							copy2.setPlayer('P');
 						}else{
-							copy2.setPlayer(1);
+							copy2.setPlayer('B');
 						}
 						copy2.movecount++;
 						//System.out.println(copy2.getPlayer());
