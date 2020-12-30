@@ -3,6 +3,7 @@ import java.util.Random;
 import java.util.List;
 
 class MCTS {
+	
 	static class State {
 		List<State> childArray;
 		private State father;
@@ -10,15 +11,29 @@ class MCTS {
 		private double totalScore = 0;
 		private double numberOfVisits = 0;
 
+		
+
 		public State() {
 		}
-
+		
+		
+		/**
+		 * Construtor de um State a partir de um Ilayout e um State
+		 * @param Ilayout l - Representa a board atual 
+		 * @param State father- Representa o State pai do State atual
+		 */
 		public State(Ilayout l, State father) {
 			this.father=father;
 			this.layout = l;
 			this.childArray = new ArrayList<>();
 		}
 
+		/** 
+		 * Construtor de um State a partir de um Ilayout e um State
+		 * @param l  Ilayout que representa a board atual 
+		 * @param father State que representa o State pai do State atual
+		 * @param childArray - Lista de State que representa os filhos do State atual
+		 */
 		public State(Ilayout l, State father, List<State> childArray) {
 			this.layout = l;
 			this.childArray = childArray;
@@ -54,7 +69,12 @@ class MCTS {
 			return this.layout;
 		}
 	}
-
+	
+	/**
+	 * Calcula os Sucessores do State n
+	 * @param n State no qual se pretende obter os sucessores
+	 * @return Lista de States dos sucessores de n
+	 */
 	final private static List<State> sucessors(State n) {
 		List<State> sucs = new ArrayList<>();
 		List<Ilayout> children = n.layout.children();
@@ -67,6 +87,11 @@ class MCTS {
 		return sucs;
 	}
 
+	/**
+	 * Calcula o melhor State, com base no numero de visitas
+	 * @param childArray - Lista de States que representa os filhos da root
+	 * @return O State que representa a melhor jogada a se fazer
+	 */
 	public static State bestChild(List<State> childArray){
         State result = null;
         double Ratio = Double.MIN_VALUE;
@@ -82,6 +107,13 @@ class MCTS {
         return result;
     }
 
+	
+	/**
+	 * Algoritmo MonteCarloTreeSearch que descobre a melhor jogada a se fazerr
+	 * @param s Ilayout que representa a board atual
+	 * @param opponent char carater para saber a que pertence a jogada anterior
+	 * @return Ilayout que representa a jogada que o MCTS definiu como melhor.
+	 */
 	public Ilayout solve(Ilayout s, char opponent) {
 
 
@@ -116,23 +148,30 @@ class MCTS {
 		return winstate.layout ;
 	}
 
+	
+	/**
+	 * Escolhe o melhor State com base no UCT
+	 * @param rootState State inicial 
+	 * @param bot char que representa que bot e a jogar no caso de ser dois bots a jogar
+	 * @return State selecionado com base no UCT
+	 */
 	public static State selectPromisingState(State rootState, char bot) {
 		State state = rootState;
 		while (state.childArray.size() > 0) {
 			if (bot == 'B') {
 				if (state.layout.getPlayer()=='P') {
-					state = findBestNodeWithUCTMax(state.childArray, 'B');
+					state = findBestNodeWithUCTMax(state.childArray);
 				}
 				else{
-					state = findBestNodeWithUCTMin(state.childArray, 'P');
+					state = findBestNodeWithUCTMin(state.childArray);
 				}
 			}
 			else{
 				if (state.layout.getPlayer()=='B') {
-					state = findBestNodeWithUCTMax(state.childArray, 'P');
+					state = findBestNodeWithUCTMax(state.childArray);
 				}
 				else{
-					state = findBestNodeWithUCTMin(state.childArray, 'B');
+					state = findBestNodeWithUCTMin(state.childArray);
 				}
 			}
 		}
@@ -140,7 +179,12 @@ class MCTS {
 
 	}
 	
-	public static State findBestNodeWithUCTMin(List<State> childs, char bot) {
+	/**
+	 * Calcula o State que tem menor UCT 
+	 * @param childs Lista dos States a ser analisadps 
+	 * @return State com o menor UCT
+	 */
+	public static State findBestNodeWithUCTMin(List<State> childs) {
 		State result = null;
 		double uctPrevious = Double.MAX_VALUE;
 		for (State child : childs) {
@@ -154,7 +198,13 @@ class MCTS {
 		return result;
 	}
 
-	public static State findBestNodeWithUCTMax(List<State> childs, char bot) {
+	
+	/**
+	 * Calcula o State que tem maior UCT 
+	 * @param childs Lista dos States a ser analisadps 
+	 * @return State com o maior UCT
+	 */
+	public static State findBestNodeWithUCTMax(List<State> childs) {
 		State result = null;
 		double uctPrevious = -1;
 		for (State child : childs) {
@@ -168,26 +218,36 @@ class MCTS {
 		return result;
 	}
 
+	/**
+	 * Calcula o valor do UCT do State
+	 * @param child State para o qual vai ser calculado o UCT
+	 * @param minOrmax char para saber se nao existir visitas por +infinito ou -inifito
+	 * @return double que corresponde ao valor do UCT para aquele State
+	 */
 	public static double uctValue(State child, char minOrmax) {
 		double parentVisit = child.father.numberOfVisits;
 		double nodeVisits = child.numberOfVisits;
-		double result=0;
-		if (minOrmax== 'm') {
+		double result = 0;
+		if (minOrmax == 'm') {
 			if (nodeVisits == 0) {
-				result= Double.MIN_VALUE;
+				result = Double.MIN_VALUE;
 			}
-			result = ((child.totalScore / nodeVisits) + 0.3 * Math.sqrt(Math.log(parentVisit) / nodeVisits));
-		}
-		else if (minOrmax== 'M') {
+		} else if (minOrmax == 'M') {
 			if (nodeVisits == 0) {
-				result= Double.MAX_VALUE;
+				result = Double.MAX_VALUE;
 			}
-			result= ((child.totalScore / nodeVisits) + 0.3 * Math.sqrt(Math.log(parentVisit) / nodeVisits));
 		}
+		result = ((child.totalScore / nodeVisits) + 0.3 * Math.sqrt(Math.log(parentVisit) / nodeVisits));
 		return result;
 	}
+
 	
-	public static State checkwin(List<State> childs) {
+	/**
+	 * Verifica se existe State terminais
+	 * @param childs Lista de States ao qual vai ser verificado se existe States terminais
+	 * @return State que representa o State terminal 
+	 */
+	public static State checkterminal(List<State> childs) {
 		State result = null;
 		for (State state : childs) {
 			if (state.layout.getResult() == 'E') {
@@ -200,7 +260,13 @@ class MCTS {
 		return result;
 	}
 
-	private static List<State> simulation(List<State> childs) {
+	
+	/**
+	 * Calcula as simulacoes da lista de filhos
+	 * @param childs Lista de States ao qual se pertende submeter as simulacoes
+	 * @return Lista de States que representam os States terminais de cada um dos filhos
+	 */
+	public static List<State> simulation(List<State> childs) {
 		List<State> winlist = new ArrayList<>();
 		for (State state : childs) {
 			char winscore = state.layout.getResult();
@@ -209,7 +275,7 @@ class MCTS {
 			List<State> temporarychilds = sucessors(state);
 			State ts = state;
 			while (temporarychilds.size() != 0 && winscore == 'E') {
-				if (checkwin(temporarychilds)== null) {
+				if (checkterminal(temporarychilds)== null) {
 					ts = new State(temporarychilds.get(rand.nextInt(temporarychilds.size())).layout, ts);
 					winscore = ts.layout.getResult();
 					//System.out.println((Board) ts.layout);
@@ -218,8 +284,8 @@ class MCTS {
 					temporarychilds = sucessors(ts);
 				}
 				else{
-					winscore = checkwin(temporarychilds).layout.getResult();
-					ts= checkwin(temporarychilds);
+					winscore = checkterminal(temporarychilds).layout.getResult();
+					ts= checkterminal(temporarychilds);
 				}
 		}
 		winlist.add(ts);
@@ -229,6 +295,12 @@ class MCTS {
 		return winlist;
 	}
 
+	/**
+	 * Propagacao das vitorias/derrotas/empates para os States father
+	 * @param childs Lista de filhos ao qual foram submetidas as simulacoes
+	 * @param values Lista dos States terminais correspondestes a cada filho
+	 * @param bot char que representa que bot e a jogar no caso de ser dois bots a jogar
+	 */
 	private static void backpropagation(List<State> childs, List<State> values, char bot) {
 	
 		if (values.size()!= childs.size()) {

@@ -10,17 +10,12 @@ class Board implements Ilayout, Cloneable {
 	private int[][] board = new int[size][size];
 	private char player;
 	private int movecount;
-	/*
-	 * -1| 1| 1 1| -1| 1 1| 1|-1
-	 * 
-	 * 0 --> - 1 --> X -1 --> O
-	 * 
-	 * Player uses "X" Bot uses "O"
-	 * 
-	 * P --> Player wins D --> Draw B --> Bot wins
-	 * 
-	 */
 
+	/**
+	 * Construtor da Board a partir de uma matrix e um player
+	 * @param board array de inteiros representando o jogo
+	 * @param player char que representa o player a qual a jogada pertence
+	 */
 	public Board(int[][] board, char player) {
 
 		try {
@@ -44,8 +39,12 @@ class Board implements Ilayout, Cloneable {
 		}
 	}
 
+	/**
+	 * Construtor da Board vazia
+	 */
 	public Board() {
 	}
+
 
 	public int[][] getBoard() {
 		return board;
@@ -65,6 +64,11 @@ class Board implements Ilayout, Cloneable {
 
 
 	@Override
+	/**
+	 * Verificacao se duas Boards sao iguais
+	 * @param t Object em que e feito cast para Board
+	 * @return verdadeiro ou falso consoante o resultado da comparacao
+	 */
 	public boolean equals(Object t) {
 		int[][] l1 = ((Board) t).board;
 		for (int i = 0; i < size; i++) {
@@ -76,6 +80,11 @@ class Board implements Ilayout, Cloneable {
 		return true;
 	}
 
+	
+	/**
+	 * cria um clone de uma Board
+	 * @return Um clone da Board atual
+	 */
 	public Board clone() {
 
 		Board cpy = new Board();
@@ -117,6 +126,12 @@ class Board implements Ilayout, Cloneable {
 		return result;
 	}
 
+
+	
+	/**
+	 * Calcula o resultado da Board atual
+	 * @return char que representa o resultado da Board atual
+	 */
 	public char getResult() {
 
 		Board copy = this.clone();
@@ -187,15 +202,15 @@ class Board implements Ilayout, Cloneable {
 				}
 			}
 		}
-
-		/*//If there´s no win after all of the possibilities then for sure the board is filled to is max and a draw is declared
-		if (result != 1.0 && result != 0.0) {
-			result = 0.5;
-		}*/
-
 		return result;
+
+
 	}
 
+	/**
+	 * Em caso de jogar contra um player, funcao que traduz a jogada do player para matrix
+	 * @param index inteiro que indica onde o player jogou
+	 */
 	public void makeMove(int index){
 		this.player='P';
 		this.movecount++;
@@ -267,7 +282,9 @@ class Board implements Ilayout, Cloneable {
 	}
 
 
-
+	/**
+	 * Print dos resultados dos jogos
+	 */
 	public void printresults(){
 		if (this.getResult()=='B') {
 			System.out.println("Jogo ganho pelo Bot!");
@@ -282,15 +299,23 @@ class Board implements Ilayout, Cloneable {
 	}
 
 	@Override
-	public boolean endofGame(){
+	/**
+	 * Verifica se a Board esta completa
+	 * @return true se estiver completa
+	 * @return false se nao estiver completa
+	 */
+	public boolean endofGame() {
 		if (this.movecount < 9) {
 			return false;
 		}
 		return true;
 	}
 
-
 	@Override
+	/**
+	 * Gera os filhos da Board atual
+	 * @return Lista com os filhos e o respetivo player e numero de movimentos.
+	 */
 	public List<Ilayout> children() {
 
 		List<Ilayout> list = new ArrayList<Ilayout>();
